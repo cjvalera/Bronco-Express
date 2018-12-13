@@ -134,7 +134,7 @@ class DetailTableViewController: UITableViewController {
         let options = [3, 5, 8, 12]
         for option in options {
             ac.addAction(UIAlertAction(title: "\(option) minutes", style: .default, handler: { [unowned self] _ in
-                let arrivalTime = (Int(arrival.arriveTime) ?? 0) - option
+                let arrivalTime = arrival.minutes - option
                 var body = "Bus will arrive in \(arrivalTime) minutes."
                 if arrivalTime <= 1 {
                     body = "Bus has arrived."

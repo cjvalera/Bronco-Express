@@ -45,8 +45,8 @@ class HomeTableViewController: UITableViewController {
         busButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         busButton.addTarget(self, action: #selector(busTapped), for: .touchUpInside)
         
-        let announcementButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(announcementTapped))
-        navigationItem.leftBarButtonItem = announcementButton
+        let settingsButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(settingsTapped))
+        navigationItem.leftBarButtonItem = settingsButton
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: busButton)
         
@@ -69,7 +69,12 @@ class HomeTableViewController: UITableViewController {
     }
     
     private func setInitialRoute() {
-        selectedRoute = routes.first
+        let savedInitialRoute = getInitialRoute()
+        if let route = routes.first(where: { $0.id == savedInitialRoute } ) {
+            selectedRoute = route
+        } else {
+            selectedRoute = routes.first
+        }
         getStops(routeID: selectedRoute.id)
     }
     
@@ -104,8 +109,9 @@ class HomeTableViewController: UITableViewController {
         present(ac, animated: true)
     }
     
-    @objc func announcementTapped() {
-        let vc = AnnouncementTableViewController()
+    @objc func settingsTapped() {
+        let vc = SettingsTableViewController()
+        vc.routes = routes
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -134,6 +140,11 @@ class HomeTableViewController: UITableViewController {
     
     private func isFiltering() -> Bool {
         return searchController.isActive && !searchBarIsEmpty()
+    }
+    
+    private func getInitialRoute() -> Int {
+        let dict = UserDefaults.standard.object(forKey: "initialRoute") as? [String: Int] ?? ["None": -1]
+        return dict.values.first!
     }
 
     // MARK: - Table view data source

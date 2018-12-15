@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 
 class SettingsTableViewController: UITableViewController {
     
@@ -14,6 +15,9 @@ class SettingsTableViewController: UITableViewController {
     
     let initialRouteCellIdentifier = "initialRouteCell"
     let announcementCellIdentifier = "announcementCell"
+    let rateThisAppIdentifier = "rateThisAppCell"
+    let aboutUsIdentifier = "aboutUsCell"
+    let appId = "585027354"
     
     // MARK: - Initial
 
@@ -27,17 +31,17 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0, 1:
+        case 0, 1, 2, 3:
             return 1
         default:
             fatalError("Unknown sections number")
         }
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,6 +65,24 @@ class SettingsTableViewController: UITableViewController {
                 return announcementCell
             default: fatalError("Unknown row in section 1")
             }
+        case 2:
+            switch indexPath.row {
+            case 0:
+                let rateAppCell = UITableViewCell(style: .default, reuseIdentifier: rateThisAppIdentifier)
+                rateAppCell.textLabel?.text = "Rate This App"
+                rateAppCell.accessoryType = .disclosureIndicator
+                return rateAppCell
+            default: fatalError("Unknown row in section 2")
+            }
+        case 3:
+            switch indexPath.row {
+            case 0:
+                let aboutUsCell = UITableViewCell(style: .default, reuseIdentifier: aboutUsIdentifier)
+                aboutUsCell.textLabel?.text = "About Us"
+                aboutUsCell.accessoryType = .disclosureIndicator
+                return aboutUsCell
+            default: fatalError("Unknown row in section 3")
+            }
         default: fatalError("Unknown section")
         }
     }
@@ -79,6 +101,16 @@ class SettingsTableViewController: UITableViewController {
             switch indexPath.row {
             case 0: goToAnnouncement()
             default: fatalError("Unknown select row in section 1")
+            }
+        case 2:
+            switch indexPath.row {
+            case 0: rateThisApp()
+            default: fatalError("Unknown select row in section 2")
+            }
+        case 3:
+            switch indexPath.row {
+            case 0: goToAboutUs()
+            default: fatalError("Unknown select row in section 3")
             }
         default: fatalError("Unknown section")
         }
@@ -115,4 +147,18 @@ class SettingsTableViewController: UITableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    private func goToAboutUs(){
+        let vc = AboutUsTableViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func rateThisApp(){
+        let appReviewUrl = "https://itunes.apple.com/app/viewContentsUserReviews?id=\(appId)"
+        if #available( iOS 10.3,*){
+            SKStoreReviewController.requestReview() //Looks really nice on the app
+        }
+        else{
+            Browser.open(appReviewUrl)
+        }
+    }
 }

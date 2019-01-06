@@ -49,9 +49,9 @@ class HomeTableViewController: UITableViewController {
         settingsButton.setImage(UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal), for: .normal)
         settingsButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: settingsButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: busButton)
-        
     }
     
     // MARK: - API calls

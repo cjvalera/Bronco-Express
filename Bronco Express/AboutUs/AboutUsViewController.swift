@@ -8,17 +8,14 @@
 
 import UIKit
 
-class AboutUsViewController: UITableViewController, UITextViewDelegate {
-    let writerIdentifier = "WritersCell"
-    let websiteIdentifier = "WebsiteCell"
+class AboutUsViewController: UIViewController {
     let aboutUsTitle = "About Us"
-    let writers = [("Christian Valera", "https://google.com"), ("Brandon Choi", "https://google.com")]
+    let writerText = "\n\nChristian Valera\nhttps://google.com\n\nBrandon Choi\nhttps://google.com"
     
     var textView: UITextView!
     
-    override func loadView() {
+    override func viewDidLoad() {
         textView = UITextView()
-        textView.delegate = self
         setupTextView()
         view = textView
         title = aboutUsTitle
@@ -31,14 +28,6 @@ class AboutUsViewController: UITableViewController, UITextViewDelegate {
         textView.backgroundColor = UIColor(hexString: "#F3F3F3FF")
         textView.textAlignment = NSTextAlignment.center
         textView.dataDetectorTypes = .all
-        textView.text = getAboutUsText()
-    }
-    //prob could just hardcode this so we don't generate on the fly... but i wanted to play around with swift xd
-    private func getAboutUsText() -> String {
-        var aboutUsText = String()
-        writers.forEach { writer in
-            aboutUsText.append("\r\n\r\n\(writer.0)\r\n\(writer.1)")
-        }
-        return aboutUsText
+        textView.text = writerText
     }
 }

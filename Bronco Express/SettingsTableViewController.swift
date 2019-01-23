@@ -17,7 +17,8 @@ class SettingsTableViewController: UITableViewController {
     let announcementCellIdentifier = "announcementCell"
     let rateThisAppIdentifier = "rateThisAppCell"
     let aboutUsIdentifier = "aboutUsCell"
-    let appId = "585027354"
+    // TODO: Add app ID
+    let appId = ""
     
     // MARK: - Initial
 
@@ -133,7 +134,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     private func goToAboutUs(){
-        let vc = AboutUsViewController()
+        let vc = AboutViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -73,7 +73,7 @@ class DetailTableViewController: UITableViewController {
             return 1
         } else {
             let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
-            messageLabel.text = "No buses currently on route. Please pull down to refresh."
+            messageLabel.text = "No buses currently on route. \nPlease pull down to refresh."
             messageLabel.textColor = UIColor.lightGray
             messageLabel.numberOfLines = 0
             messageLabel.textAlignment = .center

@@ -1,5 +1,5 @@
 //
-//  AboutUsTableViewController.swift
+//  AboutViewController.swift
 //  Bronco Express
 //
 //  Created by Brandon Choi on 12/14/18.
@@ -8,26 +8,29 @@
 
 import UIKit
 
-class AboutUsViewController: UIViewController {
-    let aboutUsTitle = "About Us"
-    let writerText = "\n\nChristian Valera\nhttps://google.com\n\nBrandon Choi\nhttps://google.com"
+class AboutViewController: UIViewController {
     
-    var textView: UITextView!
+    let aboutText = "\nChristian Valera\nhttps://christianvalera.com\n\nBrandon Choi\nhttps://github.com/bmcpc"
+    
+    lazy var textView: UITextView = {
+        let view = UITextView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.dataDetectorTypes = .link
+        view.textAlignment = .center
+        view.font = .systemFont(ofSize: 18)
+        view.isEditable = false
+        view.isSelectable = true
+        view.text = aboutText
+        return view
+    }()
     
     override func viewDidLoad() {
-        textView = UITextView()
-        setupTextView()
-        view = textView
-        title = aboutUsTitle
-    }
-    
-    private func setupTextView(){
-        textView.font = .systemFont(ofSize: 18)
-        textView.isEditable = false
-        textView.isSelectable = true
-        textView.backgroundColor = UIColor(hexString: "#F3F3F3FF")
-        textView.textAlignment = NSTextAlignment.center
-        textView.dataDetectorTypes = .all
-        textView.text = writerText
+        super.viewDidLoad()
+        title = "About Us"
+        view.addSubview(textView)
+        textView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        textView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        textView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 }

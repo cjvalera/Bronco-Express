@@ -33,6 +33,17 @@ class DetailTableViewController: UITableViewController {
         return dt
     }()
     
+    lazy var messageLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
+        label.text = "No buses currently on route. \nPlease pull down to refresh."
+        label.textColor = UIColor.lightGray
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 18)
+        label.sizeToFit()
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,14 +83,6 @@ class DetailTableViewController: UITableViewController {
             tableView.backgroundView = nil
             return 1
         } else {
-            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
-            messageLabel.text = "No buses currently on route. \nPlease pull down to refresh."
-            messageLabel.textColor = UIColor.lightGray
-            messageLabel.numberOfLines = 0
-            messageLabel.textAlignment = .center
-            messageLabel.font = .systemFont(ofSize: 18)
-            messageLabel.sizeToFit()
-            
             tableView.backgroundView = messageLabel
             tableView.separatorStyle = .none
             return 0

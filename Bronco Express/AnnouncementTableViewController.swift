@@ -22,7 +22,7 @@ class AnnouncementTableViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 55
         
-        title = "Announcement"
+        title = "Announcements"
         navigationItem.largeTitleDisplayMode = .never
         getAnnouncements()
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41A910CF21C4CC7B002A20D0 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A910CE21C4CC7B002A20D0 /* AboutUsViewController.swift */; };
 		CB0D315121BC488D00346617 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0D315021BC488D00346617 /* AppDelegate.swift */; };
 		CB0D315B21BC489000346617 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB0D315921BC489000346617 /* LaunchScreen.storyboard */; };
 		CB0D316521BC494100346617 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0D316421BC494100346617 /* HomeTableViewController.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		41A910CE21C4CC7B002A20D0 /* AboutUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
 		CB0D314D21BC488D00346617 /* Bronco Express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bronco Express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB0D315021BC488D00346617 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB0D315A21BC489000346617 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		41A910CD21C4CC4E002A20D0 /* AboutUs */ = {
+			isa = PBXGroup;
+			children = (
+				41A910CE21C4CC7B002A20D0 /* AboutUsViewController.swift */,
+			);
+			path = AboutUs;
+			sourceTree = "<group>";
+		};
 		CB0D314421BC488D00346617 = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +102,7 @@
 		CBE09AAD21BD9C20008CE3AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				41A910CD21C4CC4E002A20D0 /* AboutUs */,
 				CBE09AC621C391CC008CE3AF /* Settings */,
 				CBE09AB321BDAFBB008CE3AF /* Announcements */,
 				CBE09AB221BDAFA9008CE3AF /* Arrivals */,
@@ -244,6 +255,7 @@
 				CBE09AA721BCFF0E008CE3AF /* API.swift in Sources */,
 				CBE09ABE21BF5F0F008CE3AF /* Arrival.swift in Sources */,
 				CBE09AC521C0E485008CE3AF /* UserNotificationManager.swift in Sources */,
+				41A910CF21C4CC7B002A20D0 /* AboutUsViewController.swift in Sources */,
 				CB0D315121BC488D00346617 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

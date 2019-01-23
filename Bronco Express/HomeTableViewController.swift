@@ -45,11 +45,13 @@ class HomeTableViewController: UITableViewController {
         busButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         busButton.addTarget(self, action: #selector(busTapped), for: .touchUpInside)
         
-        let settingsButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(settingsTapped))
-        navigationItem.leftBarButtonItem = settingsButton
+        let settingsButton = UIButton(type: .system)
+        settingsButton.setImage(UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        settingsButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: settingsButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: busButton)
-        
     }
     
     // MARK: - API calls

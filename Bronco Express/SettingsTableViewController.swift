@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 
 class SettingsTableViewController: UITableViewController {
     
@@ -14,6 +15,9 @@ class SettingsTableViewController: UITableViewController {
     
     let initialRouteCellIdentifier = "initialRouteCell"
     let announcementCellIdentifier = "announcementCell"
+    let rateThisAppIdentifier = "rateThisAppCell"
+    let aboutUsIdentifier = "aboutUsCell"
+    let appId = "585027354"
     
     // MARK: - Initial
 
@@ -32,12 +36,13 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0, 1:
+        case 0:
             return 1
+        case 1:
+            return 3
         default:
             fatalError("Unknown sections number")
         }
-        return 2
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,6 +64,16 @@ class SettingsTableViewController: UITableViewController {
                 announcementCell.textLabel?.text = "Announcements"
                 announcementCell.accessoryType = .disclosureIndicator
                 return announcementCell
+            case 1:
+                let rateAppCell = UITableViewCell(style: .default, reuseIdentifier: rateThisAppIdentifier)
+                rateAppCell.textLabel?.text = "Rate This App"
+                rateAppCell.accessoryType = .disclosureIndicator
+                return rateAppCell
+            case 2:
+                let aboutUsCell = UITableViewCell(style: .default, reuseIdentifier: aboutUsIdentifier)
+                aboutUsCell.textLabel?.text = "About Us"
+                aboutUsCell.accessoryType = .disclosureIndicator
+                return aboutUsCell
             default: fatalError("Unknown row in section 1")
             }
         default: fatalError("Unknown section")
@@ -78,6 +93,8 @@ class SettingsTableViewController: UITableViewController {
         case 1:
             switch indexPath.row {
             case 0: goToAnnouncement()
+            case 1: rateThisApp()
+            case 2: goToAboutUs()
             default: fatalError("Unknown select row in section 1")
             }
         default: fatalError("Unknown section")
@@ -115,4 +132,12 @@ class SettingsTableViewController: UITableViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    private func goToAboutUs(){
+        let vc = AboutUsViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func rateThisApp(){
+        SKStoreReviewController.requestReview()
+    }
 }

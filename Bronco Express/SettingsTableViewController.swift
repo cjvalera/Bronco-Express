@@ -17,8 +17,6 @@ class SettingsTableViewController: UITableViewController {
     let announcementCellIdentifier = "announcementCell"
     let rateThisAppIdentifier = "rateThisAppCell"
     let aboutUsIdentifier = "aboutUsCell"
-    // TODO: Add app ID
-    let appId = ""
     
     // MARK: - Initial
 

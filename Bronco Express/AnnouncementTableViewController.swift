@@ -14,6 +14,17 @@ class AnnouncementTableViewController: UITableViewController {
     
     var announcementTableViewCell = "announcementTableViewCell"
     
+    lazy var messageLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
+        label.text = "No announcement"
+        label.textColor = UIColor.lightGray
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 18)
+        label.sizeToFit()
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +55,18 @@ class AnnouncementTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if !announcements.isEmpty {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
+            return 1
+        } else {
+            tableView.backgroundView = messageLabel
+            tableView.separatorStyle = .none
+            return 0
+        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return announcements.count

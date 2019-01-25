@@ -18,6 +18,17 @@ class HomeTableViewController: UITableViewController {
     var stopTableViewCell = "stopTableViewCell"
     
     let searchController = UISearchController(searchResultsController: nil)
+    
+    lazy var messageLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
+        label.text = "Stops unavailable"
+        label.textColor = UIColor.lightGray
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 18)
+        label.sizeToFit()
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,17 +109,19 @@ class HomeTableViewController: UITableViewController {
     // MARK: - Navigation bar button handlers
     
     @objc func busTapped() {
-        let ac = UIAlertController(title: "Choose route", message: nil, preferredStyle: .actionSheet)
-        for route in routes {
-            ac.addAction(UIAlertAction(title: route.name, style: .default, handler: { [unowned self] _ in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-                self.selectedRoute = route
-                self.getStops(routeID: route.id)
-            }))
+        if !routes.isEmpty {
+            let ac = UIAlertController(title: "Choose route", message: nil, preferredStyle: .actionSheet)
+            for route in routes {
+                ac.addAction(UIAlertAction(title: route.name, style: .default, handler: { [unowned self] _ in
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                    self.selectedRoute = route
+                    self.getStops(routeID: route.id)
+                }))
+            }
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            ac.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItems?.first
+            present(ac, animated: true)
         }
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        ac.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItems?.first
-        present(ac, animated: true)
     }
     
     @objc func settingsTapped() {
@@ -150,6 +163,19 @@ class HomeTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if !stops.isEmpty {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
+            return 1
+        } else {
+            title = "Home"
+            tableView.backgroundView = messageLabel
+            tableView.separatorStyle = .none
+            return 0
+        }
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering() {

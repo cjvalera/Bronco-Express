@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import MapKit
 
-struct Stop: Codable {
+class Stop: NSObject, Codable, MKAnnotation {
+
     let id: Int
     let latitude: Double
     let longitude: Double
@@ -27,5 +29,30 @@ struct Stop: Codable {
         case showLabel = "ShowLabel"
         case showStopRtpiNumberLabel = "ShowStopRtpiNumberLabel"
         case showVehicleName = "ShowVehicleName"
+    }
+    
+    var coordinate : CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    var title: String? {
+        return name
+    }
+    
+    var location : CLLocation {
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+    
+    var subtitle: String?
+    
+}
+
+struct Waypoint: Codable {
+    let latitude: Double
+    let longitude: Double
+    
+    enum CodingKeys: String, CodingKey {
+        case latitude = "Latitude"
+        case longitude = "Longitude"
     }
 }

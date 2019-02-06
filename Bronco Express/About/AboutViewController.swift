@@ -12,7 +12,7 @@ class AboutViewController: UIViewController {
     
     let aboutText = "\nChristian Valera\nhttps://christianvalera.com\n\nBrandon Choi\nhttps://github.com/bmcpc"
     
-    lazy var textView: UITextView = {
+    private lazy var textView: UITextView = {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.dataDetectorTypes = .link

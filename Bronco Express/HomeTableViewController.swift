@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Pulley
 
 class HomeTableViewController: UITableViewController {
     
@@ -208,11 +209,29 @@ class HomeTableViewController: UITableViewController {
         } else {
             stop = stops[indexPath.row]
         }
+        goToArrival(stop)
         
-        let vc = DetailTableViewController()
-        vc.routeID = selectedRoute.id
-        vc.stop = stop
-        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func goToArrival(_ stop: Stop) {
+       
+        let mapViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+        
+        mapViewController.allStops = stops
+        mapViewController.selectedStop = stop
+        mapViewController.route  = selectedRoute
+        
+        let detailTableViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        
+        detailTableViewController.routeID = selectedRoute.id
+        detailTableViewController.stop = stop
+        
+        let pulleyController = PulleyViewController(contentViewController: mapViewController, drawerViewController: detailTableViewController)
+        pulleyController.title = stop.name
+        
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.pushViewController(pulleyController, animated: true)
     }
 }
 

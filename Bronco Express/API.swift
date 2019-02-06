@@ -43,4 +43,19 @@ struct API {
         components.path = "/Home/GetPortalEntries"
         return components.url
     }
+    
+    static func getVehicles(route: Int) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "broncoshuttle.com"
+        components.path = "/Route/\(route)/Vehicles"
+        return components.url
+    }
+    static func getWaypoints(route: Int) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "broncoshuttle.com"
+        components.path = "/Route/\(route)/Waypoints"
+        return components.url
+    }
 }

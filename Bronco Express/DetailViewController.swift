@@ -1,5 +1,5 @@
 //
-//  DetailTableViewController.swift
+//  DetailViewController.swift
 //  Bronco Express
 //
 //  Created by Christian Valera on 12/9/18.
@@ -8,25 +8,19 @@
 
 import UIKit
 import MapKit
+import Pulley
 
-class DetailTableViewController: UITableViewController {
+class DetailViewController: UIViewController {
     
-    var arrivals = [Arrival]()
-    
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var gripView: UIView!
     var arrivalTableViewCell = "arrivalTableViewCell"
-    
+
+    var arrivals = [Arrival]()
     var routeID: Int!
     var stop: Stop!
     
     let userNotificationManager = UserNotificationManager()
-    
-    lazy var rc: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.backgroundColor = UIColor(hexString: "#00843DFF")
-        refreshControl.tintColor = UIColor.white
-        refreshControl.addTarget(self, action: #selector(getArrivals), for: .valueChanged)
-        return refreshControl
-    }()
     
     lazy var formatter: DateFormatter = {
         let dt = DateFormatter()
@@ -34,10 +28,10 @@ class DetailTableViewController: UITableViewController {
         return dt
     }()
     
-    lazy var messageLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
-        label.text = "No buses currently on route. \nPlease pull down to refresh."
-        label.textColor = UIColor.lightGray
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No buses currently on route."
+        label.textColor = .lightGray
         label.numberOfLines = 0
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18)
@@ -47,19 +41,24 @@ class DetailTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = stop.name
-        navigationItem.largeTitleDisplayMode = .never
-        
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.tableFooterView = UIView()
-        tableView.rowHeight = 55
-        tableView.refreshControl = rc
         
+        gripView.layer.cornerRadius = 2.5
         getArrivals()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(bounceDrawer), userInfo: nil, repeats: false)
+    }
+    
+    @objc fileprivate func bounceDrawer() {
+        pulleyViewController?.bounceDrawer()
     }
     
     // MARK: - API call
-    @objc private func getArrivals() {
+    func getArrivals() {
         DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
             if let url = API.getDirectionURL(route: self.routeID, stop: self.stop.id) {
                 if let data = try? Data(contentsOf: url) {
@@ -67,69 +66,12 @@ class DetailTableViewController: UITableViewController {
                     if let results = try? decoder.decode([Arrival].self, from: data) {
                         self.arrivals = results
                         DispatchQueue.main.async { [unowned self] in
-                            self.tableView.refreshControl?.endRefreshing()
                             self.tableView.reloadData()
                         }
                     }
                 }
             }
         }
-    }
-
-    // MARK: - Table view data source
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        if !arrivals.isEmpty {
-            tableView.separatorStyle = .singleLine
-            tableView.backgroundView = nil
-            return 1
-        } else {
-            tableView.backgroundView = messageLabel
-            tableView.separatorStyle = .none
-            return 0
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrivals.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: arrivalTableViewCell) else {
-                return UITableViewCell(style: .subtitle, reuseIdentifier: arrivalTableViewCell)
-            }
-            return cell
-        }()
-        
-        cell.selectionStyle = .none
-
-        let arrival = arrivals[indexPath.row]
-        cell.textLabel?.text = "Bus \(arrival.busName)"
-        cell.detailTextLabel?.text = arrival.arriveTime
-        
-        let label = UILabel.init(frame: CGRect(x:0,y:0,width:100,height:20))
-        if let time = Int(arrival.time), time <= 1 {
-            label.text = "Arriving"
-        } else {
-            label.text = "\(arrival.time) minutes"
-        }
-
-        cell.accessoryView = label
-        return cell
-    }
-
-    // MARK: - Table view delegate
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let alarm = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
-            self.setReminder(self.arrivals[indexPath.row])
-            completionHandler(true)
-        }
-        alarm.image = #imageLiteral(resourceName: "bell.pdf")
-        alarm.backgroundColor = UIColor(hexString: "#01426AFF")
-        
-        let config = UISwipeActionsConfiguration(actions: [alarm])
-        return config
     }
     
     // MARK: - Set notification reminder
@@ -144,13 +86,83 @@ class DetailTableViewController: UITableViewController {
                     body = "Bus has arrived."
                 }
                 self.userNotificationManager.sendNotification(title: "\(self.stop.name)",
-                                                            subtitle: "\(arrival.routeName) - Bus \(arrival.busName)",
-                                                            body: body,
-                                                            badge: 1,
-                                                            delayInterval: option * 60)
+                    subtitle: "\(arrival.routeName) - Bus \(arrival.busName)",
+                    body: body,
+                    badge: 1,
+                    delayInterval: option * 60)
             }))
         }
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
+    }
+
+}
+
+//MARK: UITableViewDataSource
+extension DetailViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if !arrivals.isEmpty {
+            tableView.separatorStyle = .singleLine
+            tableView.tableHeaderView = nil
+
+            return 1
+        } else {
+            tableView.tableHeaderView = messageLabel
+            tableView.separatorStyle = .none
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arrivals.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: arrivalTableViewCell) else {
+                return UITableViewCell(style: .subtitle, reuseIdentifier: arrivalTableViewCell)
+            }
+            return cell
+        }()
+        
+        cell.selectionStyle = .none
+        
+        let arrival = arrivals[indexPath.row]
+        cell.textLabel?.text = "Bus \(arrival.busName)"
+        cell.detailTextLabel?.text = arrival.arriveTime
+        
+        let label = UILabel.init(frame: CGRect(x:0,y:0,width:100,height:20))
+        if let time = Int(arrival.time), time <= 1 {
+            label.text = "Arriving"
+        } else {
+            label.text = "\(arrival.time) minutes"
+        }
+        
+        cell.accessoryView = label
+        return cell
+    }
+    
+}
+
+//MARK: UITableViewDelegate
+extension DetailViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let alarm = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            self.setReminder(self.arrivals[indexPath.row])
+            completionHandler(true)
+        }
+        alarm.image = #imageLiteral(resourceName: "bell.pdf")
+        alarm.backgroundColor = UIColor(hexString: "#01426AFF")
+        
+        let config = UISwipeActionsConfiguration(actions: [alarm])
+        return config
+    }
+}
+
+extension DetailViewController: PulleyDrawerViewControllerDelegate {
+    func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
+        return 100
     }
 }

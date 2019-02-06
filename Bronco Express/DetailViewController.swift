@@ -163,6 +163,6 @@ extension DetailViewController: UITableViewDelegate {
 
 extension DetailViewController: PulleyDrawerViewControllerDelegate {
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
-        return 100
+        return 200
     }
 }

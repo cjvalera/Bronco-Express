@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import MapKit
 
-struct Vehicle: Codable {
+class Vehicle: NSObject, Codable, MKAnnotation  {
     let id: Int
     let apcPercentage: Int
     let routeID: Int
@@ -19,7 +20,7 @@ struct Vehicle: Codable {
     let doorStatus: Int
     let latitude: Double
     let longitude: Double
-    let coordinate: Coordinate
+    let coordinateResult: Coordinate
     let speed: Int
     let heading: String
     let updated: String
@@ -36,12 +37,29 @@ struct Vehicle: Codable {
         case doorStatus = "DoorStatus"
         case latitude = "Latitude"
         case longitude = "Longitude"
-        case coordinate = "Coordinate"
+        case coordinateResult = "Coordinate"
         case speed = "Speed"
         case heading = "Heading"
         case updated = "Updated"
         case updatedAgo = "UpdatedAgo"
     }
+    
+    var coordinate : CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    var title: String? {
+        return "Bus \(name)"
+    }
+    
+    var location : CLLocation {
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+    
+    var subtitle: String? {
+        return "Heading \(heading)"
+    }
+    
 }
 
 struct Coordinate: Codable {

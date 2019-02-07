@@ -33,13 +33,12 @@ class MapViewController: UIViewController {
         DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
             if let url = API.getVehicles(route: self.route.id) {
                 if let data = try? Data(contentsOf: url) {
+//                if let data = self.getFakeVehicle() {
                     let decoder = JSONDecoder()
                     if let results = try? decoder.decode([Vehicle].self, from: data) {
                         self.vehicles = results
                         DispatchQueue.main.async { [unowned self] in
-//                            guard let firstVehicle = results.first else { return }
-//                            let initialLocation = CLLocation(latitude: firstVehicle.latitude, longitude: firstVehicle.longitude)
-//                            self.centerMapOnLocation(location: initialLocation)
+                            self.mapView.addAnnotations(results)
                         }
                     }
                 }
@@ -47,13 +46,19 @@ class MapViewController: UIViewController {
         }
     }
     
+//    private func getFakeVehicle() -> Data? {
+//        if let jsonPath = Bundle.main.path(forResource: "vehicle", ofType: "json") {
+//            return try! Data(contentsOf: URL(fileURLWithPath: jsonPath))
+//        }
+//        return nil
+//    }
+    
     func addStopsAnnotations() {
         for stop in allStops {
             stop.subtitle = route.name
             mapView.addAnnotation(stop)
         }
     }
-    
     
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
@@ -67,9 +72,23 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let annotation = annotation as? Stop else { return nil }
-        
-        let identifier = "Stop"
+        if let stopAnnotation = annotation as? Stop {
+            let identifier = "Stop"
+            let stopAnnotationView = annotationView(identifier, viewFor: stopAnnotation) as? MKMarkerAnnotationView
+            stopAnnotationView?.glyphImage = UIImage(named: "bus-stop")
+            return stopAnnotationView
+        } else if let vehicleAnnotation = annotation as? Vehicle {
+            let identifier = "Vehicle"
+            let vehicleAnnotationView = annotationView(identifier, viewFor: vehicleAnnotation) as? MKMarkerAnnotationView
+            vehicleAnnotationView?.glyphImage = UIImage(named: "bus-glyph")
+            vehicleAnnotationView?.markerTintColor = UIColor.init(hexString: "#00843DFF")
+            return vehicleAnnotationView
+        }
+        return nil
+    }
+    
+    
+    func annotationView(_ identifier: String, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
         
         if annotationView == nil {
@@ -82,7 +101,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let stop = view.annotation as! Stop
+        guard let stop = view.annotation as? Stop else { return }
         
         guard let detailViewController = pulleyViewController?.drawerContentViewController as? DetailViewController else {
             return

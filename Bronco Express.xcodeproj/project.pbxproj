@@ -16,6 +16,7 @@
 		CB868FA8220821CA00A8F76F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB868FA7220821CA00A8F76F /* MapViewController.swift */; };
 		CB868FAA220A9FEA00A8F76F /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB868FA9220A9FEA00A8F76F /* Vehicle.swift */; };
 		CB868FAC220AB9E400A8F76F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB868FAB220AB9E400A8F76F /* Assets.xcassets */; };
+		CB868FAF220C14FF00A8F76F /* vehicle.json in Resources */ = {isa = PBXBuildFile; fileRef = CB868FAE220C14FF00A8F76F /* vehicle.json */; };
 		CBE09AA521BCF396008CE3AF /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE09AA421BCF396008CE3AF /* Route.swift */; };
 		CBE09AA721BCFF0E008CE3AF /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE09AA621BCFF0E008CE3AF /* API.swift */; };
 		CBE09AA921BD13E1008CE3AF /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE09AA821BD13E1008CE3AF /* Stop.swift */; };
@@ -43,6 +44,7 @@
 		CB868FA7220821CA00A8F76F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		CB868FA9220A9FEA00A8F76F /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		CB868FAB220AB9E400A8F76F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CB868FAE220C14FF00A8F76F /* vehicle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = vehicle.json; sourceTree = "<group>"; };
 		CBE09AA421BCF396008CE3AF /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		CBE09AA621BCFF0E008CE3AF /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		CBE09AA821BD13E1008CE3AF /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
@@ -116,16 +118,15 @@
 		CB0D314F21BC488D00346617 /* Bronco Express */ = {
 			isa = PBXGroup;
 			children = (
+				CB0D315021BC488D00346617 /* AppDelegate.swift */,
+				CB0D315C21BC489000346617 /* Info.plist */,
 				CB868FA422081FA900A8F76F /* Storyboards */,
 				CBE09AC321C0E46F008CE3AF /* Managers */,
 				CBE09ABA21BDBDCF008CE3AF /* Extensions */,
 				CBE09AAF21BD9C46008CE3AF /* Views */,
 				CBE09AAE21BD9C32008CE3AF /* Model */,
 				CBE09AAD21BD9C20008CE3AF /* Controllers */,
-				CB0D315021BC488D00346617 /* AppDelegate.swift */,
-				CB868FAB220AB9E400A8F76F /* Assets.xcassets */,
-				CB0D315921BC489000346617 /* LaunchScreen.storyboard */,
-				CB0D315C21BC489000346617 /* Info.plist */,
+				CB868FAD220C141B00A8F76F /* Resources */,
 			);
 			path = "Bronco Express";
 			sourceTree = "<group>";
@@ -133,9 +134,19 @@
 		CB868FA422081FA900A8F76F /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				CB0D315921BC489000346617 /* LaunchScreen.storyboard */,
 				CB868FA52208200A00A8F76F /* Main.storyboard */,
 			);
 			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		CB868FAD220C141B00A8F76F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CB868FAE220C14FF00A8F76F /* vehicle.json */,
+				CB868FAB220AB9E400A8F76F /* Assets.xcassets */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		CBE09AAD21BD9C20008CE3AF /* Controllers */ = {
@@ -273,6 +284,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB868FAF220C14FF00A8F76F /* vehicle.json in Resources */,
 				CB868FA62208200A00A8F76F /* Main.storyboard in Resources */,
 				CB868FAC220AB9E400A8F76F /* Assets.xcassets in Resources */,
 				CB0D315B21BC489000346617 /* LaunchScreen.storyboard in Resources */,

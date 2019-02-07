@@ -1,0 +1,56 @@
+[
+  {
+    "ID": 1706,
+    "APCPercentage": 490,
+    "RouteId": 3164,
+    "PatternId": 3164,
+    "Name": "004",
+    "HasAPC": true,
+    "IconPrefix": "",
+    "DoorStatus": 0,
+    "Latitude": 34.051686,
+    "Longitude": -117.815463,
+    "Coordinate": { "Latitude": 34.051686, "Longitude": -117.815463 },
+    "Speed": 33,
+    "Heading": "NE",
+    "Updated": "5:06:21P",
+    "UpdatedAgo": "1h30m15s ago"
+  },
+  {
+    "ID": 1707,
+    "APCPercentage": 0,
+    "RouteId": 3164,
+    "PatternId": 3164,
+    "Name": "003",
+    "HasAPC": true,
+    "IconPrefix": "",
+    "DoorStatus": 0,
+    "Latitude": 34.061825,
+    "Longitude": -117.817174,
+    "Coordinate": { "Latitude": 34.061825, "Longitude": -117.817174 },
+    "Speed": 15,
+    "Heading": "SE",
+    "Updated": "2:20:42P",
+    "UpdatedAgo": "4h15m54s ago"
+  },
+  {
+    "ID": 1722,
+    "APCPercentage": 0,
+    "RouteId": 3164,
+    "PatternId": 3164,
+    "Name": "001",
+    "HasAPC": true,
+    "IconPrefix": "",
+    "DoorStatus": 0,
+    "Latitude": 34.057260855830904,
+    "Longitude": -117.82483971886708,
+    "Coordinate": {
+      "Latitude": 34.057260855830904,
+      "Longitude": -117.82483971886708
+    },
+    "Speed": 8,
+    "Heading": "E",
+    "Updated": "6:36:32P",
+    "UpdatedAgo": "4s ago"
+  }
+]

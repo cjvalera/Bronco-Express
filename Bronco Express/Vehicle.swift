@@ -57,7 +57,7 @@ class Vehicle: NSObject, Codable, MKAnnotation  {
     }
     
     var subtitle: String? {
-        return "Heading \(heading)"
+        return "\(speed)mph"
     }
     
 }

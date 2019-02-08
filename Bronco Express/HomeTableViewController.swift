@@ -229,7 +229,6 @@ class HomeTableViewController: UITableViewController {
         let pulleyController = PulleyViewController(contentViewController: mapViewController, drawerViewController: detailTableViewController)
         pulleyController.title = stop.name
         
-        
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.pushViewController(pulleyController, animated: true)
     }

@@ -48,14 +48,6 @@ class DetailViewController: UIViewController {
         gripView.layer.cornerRadius = 2.5
         getArrivals()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(bounceDrawer), userInfo: nil, repeats: false)
-    }
-    
-    @objc fileprivate func bounceDrawer() {
-        pulleyViewController?.bounceDrawer()
-    }
     
     // MARK: - API call
     func getArrivals() {
@@ -126,8 +118,6 @@ extension DetailViewController: UITableViewDataSource {
             return cell
         }()
         
-        cell.selectionStyle = .none
-        
         let arrival = arrivals[indexPath.row]
         cell.textLabel?.text = "Bus \(arrival.busName)"
         cell.detailTextLabel?.text = arrival.arriveTime
@@ -141,6 +131,14 @@ extension DetailViewController: UITableViewDataSource {
         
         cell.accessoryView = label
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let arrival = arrivals[indexPath.row]
+        guard let mapViewController = pulleyViewController?.primaryContentViewController as? MapViewController else {
+            return
+        }
+        mapViewController.didSelectNewVehicle(arrival)
     }
     
 }

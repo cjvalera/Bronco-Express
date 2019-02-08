@@ -13,19 +13,33 @@ class MapViewController: UIViewController {
     
     @IBOutlet var mapView: MKMapView!
     
-    let regionRadius: CLLocationDistance = 200
     var vehicles = [Vehicle]()
-    
     var allStops: [Stop]!
     var selectedStop: Stop!
     var route: Route!
     
+    let timeInterval: TimeInterval = 15
+    var reloadTimer: Timer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        
+        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: pulleyViewController?.primaryContentViewController, action: #selector(updateMapDetail))
+        
         addStopsAnnotations()
         centerMapOnLocation(location: selectedStop.location)
         getVehicles()
+        
+        reloadTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateMapDetail), userInfo: nil, repeats: true)
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        reloadTimer.invalidate()
+        // This fixed the crash happening when selecting a cluster then pop/dismissing the view controller
+        mapView.removeAnnotations(mapView.annotations)
     }
     
     // MARK: - API call
@@ -33,7 +47,6 @@ class MapViewController: UIViewController {
         DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
             if let url = API.getVehicles(route: self.route.id) {
                 if let data = try? Data(contentsOf: url) {
-//                if let data = self.getFakeVehicle() {
                     let decoder = JSONDecoder()
                     if let results = try? decoder.decode([Vehicle].self, from: data) {
                         self.vehicles = results
@@ -46,12 +59,14 @@ class MapViewController: UIViewController {
         }
     }
     
-//    private func getFakeVehicle() -> Data? {
-//        if let jsonPath = Bundle.main.path(forResource: "vehicle", ofType: "json") {
-//            return try! Data(contentsOf: URL(fileURLWithPath: jsonPath))
-//        }
-//        return nil
-//    }
+    @objc private func updateMapDetail() {
+        guard let detailViewController = pulleyViewController?.drawerContentViewController as? DetailViewController else {
+            return
+        }
+        mapView.removeAnnotations(vehicles)
+        detailViewController.getArrivals()
+        getVehicles()
+    }
     
     func addStopsAnnotations() {
         for stop in allStops {
@@ -60,13 +75,15 @@ class MapViewController: UIViewController {
         }
     }
     
-    func centerMapOnLocation(location: CLLocation) {
+    func centerMapOnLocation(location: CLLocation, with regionRadius: CLLocationDistance = 200 ) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+        
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
     func didSelectNewVehicle(_ arrival: Arrival) {
-        
+        guard let vehicle = vehicles.filter({ $0.id == arrival.vehicleID }).first else { return }
+        centerMapOnLocation(location: vehicle.location, with: 100)
     }
 }
 
@@ -76,12 +93,16 @@ extension MapViewController: MKMapViewDelegate {
             let identifier = "Stop"
             let stopAnnotationView = annotationView(identifier, viewFor: stopAnnotation) as? MKMarkerAnnotationView
             stopAnnotationView?.glyphImage = UIImage(named: "bus-stop")
+            stopAnnotationView?.displayPriority = .defaultLow
+            stopAnnotationView?.clusteringIdentifier = "Stops"
             return stopAnnotationView
         } else if let vehicleAnnotation = annotation as? Vehicle {
             let identifier = "Vehicle"
             let vehicleAnnotationView = annotationView(identifier, viewFor: vehicleAnnotation) as? MKMarkerAnnotationView
             vehicleAnnotationView?.glyphImage = UIImage(named: "bus-glyph")
             vehicleAnnotationView?.markerTintColor = UIColor.init(hexString: "#00843DFF")
+            vehicleAnnotationView?.displayPriority = .defaultHigh
+            vehicleAnnotationView?.clusteringIdentifier = "Vehicles"
             return vehicleAnnotationView
         }
         return nil
@@ -107,6 +128,7 @@ extension MapViewController: MKMapViewDelegate {
             return
         }
         pulleyViewController?.title = stop.name
+        selectedStop = stop
         detailViewController.stop = stop
         detailViewController.getArrivals()
     }

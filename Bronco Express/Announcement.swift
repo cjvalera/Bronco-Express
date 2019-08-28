@@ -9,15 +9,15 @@
 import Foundation
 
 struct Announcement: Codable {
-    let id: Int
-    let title: String
-    let link: String
-    let message: String
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "ID"
-        case title = "Title"
-        case link = "Link"
-        case message = "Message"
-    }
+  let id: Int
+  let title: String
+  let link: String
+  let message: String
+  
+  enum CodingKeys: String, CodingKey {
+    case id = "ID"
+    case title = "Title"
+    case link = "Link"
+    case message = "Message"
+  }
 }
